@@ -1,1 +1,3 @@
 /.idea/
+/simplechat/db.sqlite3
+/simplechat/api/migrations/
