@@ -21,5 +21,11 @@ class ThreadForm(forms.ModelForm):
 
 
 @admin.register(Thread)
-class QuestionAdmin(admin.ModelAdmin):
+class ThreadAdmin(admin.ModelAdmin):
     form = ThreadForm
+    list_display = ('get_participant_names', 'created', 'updated')
+
+    def get_participant_names(self, obj):
+        return 'Thread between ' + ' and '.join(participant.username for participant in obj.participants.all())
+
+    get_participant_names.short_description = 'Participants'
