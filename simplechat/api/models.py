@@ -1,27 +1,30 @@
 from django.db import models
+from django.utils import timezone
 from django.contrib.auth.models import User
 
 
-# Create your models here.
 class Thread(models.Model):
-    participants = models.ManyToManyField(User)
+    participants = models.ManyToManyField(User, related_name='threads')
     created = models.DateTimeField(auto_now_add=True, editable=False)
     updated = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        participants = self.participants.all()
-        return f"Thread between {participants[0]} and {participants[1]}"
+    class Meta:
+        ordering = ['-updated']
+
+    def update(self):
+        self.updated = timezone.now()
+        self.save()
 
 
 class Message(models.Model):
-    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
     text = models.TextField()
-    thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
+    thread = models.ForeignKey(Thread, on_delete=models.CASCADE, related_name='messages')
     created = models.DateTimeField(auto_now_add=True, editable=False)
     is_read = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"Message from {self.sender} to {self.thread}: {self.text}"
+        return f"Message from {self.sender}: {self.text}"
 
     def mark_as_read(self):
         self.is_read = True
