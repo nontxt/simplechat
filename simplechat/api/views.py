@@ -1,6 +1,8 @@
 from rest_framework.response import Response
 from rest_framework.generics import RetrieveAPIView, ListAPIView
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
+from rest_framework.exceptions import NotFound
+from rest_framework import status
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from .models import Thread, Message
@@ -26,19 +28,11 @@ class ThreadViewSet(ModelViewSet):
             queryset = queryset.filter(participants=interlocutor)
         return queryset
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
-
     def retrieve(self, request, *args, **kwargs):
-        interlocutor = get_object_or_404(User, username=kwargs.get('username', None))
+        username = kwargs.get('username', NotFound)
+        if self.request.user.username == username:
+            raise NotFound
+        interlocutor = get_object_or_404(User, username=username)
         queryset = self.filter_queryset(self.get_queryset(interlocutor))
         if queryset.count() == 0:
             thread = Thread.objects.create()
@@ -48,3 +42,10 @@ class ThreadViewSet(ModelViewSet):
 
         serializer = self.get_serializer(thread)
         return Response(serializer.data)
+
+    def destroy(self, request, *args, **kwargs):
+        username = kwargs.get('username', NotFound)
+        queryset = self.filter_queryset(self.get_queryset())
+        instance = get_object_or_404(queryset, participants__username=username)
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
