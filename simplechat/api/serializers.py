@@ -3,7 +3,7 @@ from .models import Thread, Message
 
 
 class MessageSerializer(serializers.ModelSerializer):
-    sender = serializers.ReadOnlyField(source='sender.username')
+    sender_name = serializers.ReadOnlyField(source='sender.username')
 
     class Meta:
         model = Message
@@ -11,7 +11,10 @@ class MessageSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'thread': {
                 'write_only': True
-            }
+            },
+            'sender': {
+                'write_only': True
+            },
         }
 
 
@@ -36,13 +39,19 @@ class LastMessageSerializer(MessageSerializer):
         return url
 
 
-class UnreadMessageSerializer(MessageSerializer):
+class UnreadMessageSerializer(serializers.ModelSerializer):
     thread_link = serializers.HyperlinkedIdentityField(view_name='thread', lookup_field='sender',
                                                        lookup_url_kwarg='username', source='thread')
+    sender = serializers.ReadOnlyField(source='sender.username', read_only=True)
 
     class Meta:
         model = Message
-        fields = ['id', 'sender', 'text', 'created', 'thread_link']
+        fields = ['id', 'sender', 'text', 'created', 'thread_link', 'is_read']
+        extra_kwargs = {
+            'is_read': {
+                'write_only': True
+            }
+        }
 
 
 class ThreadSerializer(serializers.ModelSerializer):
