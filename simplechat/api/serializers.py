@@ -20,6 +20,7 @@ class MessageSerializer(serializers.ModelSerializer):
 
 class LastMessageSerializer(MessageSerializer):
     thread_link = serializers.SerializerMethodField(read_only=True)
+    sender = serializers.ReadOnlyField(source='sender.username', read_only=True)
 
     class Meta:
         model = Message
@@ -55,14 +56,14 @@ class UnreadMessageSerializer(serializers.ModelSerializer):
 
 
 class ThreadSerializer(serializers.ModelSerializer):
-    message = serializers.SerializerMethodField()
+    messages = serializers.SerializerMethodField()
     interlocutor = serializers.SerializerMethodField()
 
     class Meta:
         model = Thread
-        fields = ['message', 'interlocutor', 'created', 'updated']
+        fields = ['messages', 'interlocutor', 'created', 'updated']
 
-    def get_message(self, obj):
+    def get_messages(self, obj):
         queryset = obj.messages.order_by('-created')
         if not queryset.exists():
             return []
