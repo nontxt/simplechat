@@ -1,6 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.generics import ListCreateAPIView
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import GenericViewSet
+from rest_framework import mixins
 from rest_framework.exceptions import NotFound
 from rest_framework import status
 from django.contrib.auth.models import User
@@ -105,7 +106,10 @@ class UnreadMessageListCreateAPIView(ListCreateAPIView):
         return Response(status=status.HTTP_200_OK)
 
 
-class ThreadModelViewSet(ModelViewSet):
+class ThreadModelViewSet(mixins.ListModelMixin,
+                         mixins.RetrieveModelMixin,
+                         mixins.DestroyModelMixin,
+                         GenericViewSet):
     queryset = Thread.objects.all()
     serializer_class = ThreadSerializer
     pagination_class = CustomPagination
@@ -122,11 +126,12 @@ class ThreadModelViewSet(ModelViewSet):
         if not queryset.exists():
             thread = Thread.objects.create()
             thread.participants.set([self.request.user, interlocutor])
-        else:
-            thread = queryset.get()
+            serializer = self.get_serializer(thread)
+            return Response(serializer.data, status.HTTP_201_CREATED)
 
+        thread = queryset.get()
         serializer = self.get_serializer(thread)
-        return Response(serializer.data)
+        return Response(serializer.data, status.HTTP_200_OK)
 
     def destroy(self, request, *args, **kwargs):
         interlocutor = is_not_current_user(self.request, **kwargs)
