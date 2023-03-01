@@ -12,6 +12,7 @@ class Thread(models.Model):
         ordering = ['-updated']
 
     def update(self):
+        """Updating thread."""
         self.updated = timezone.now()
         self.save()
 
@@ -30,5 +31,6 @@ class Message(models.Model):
         return f"Message from {self.sender}: {self.text}"
 
     def mark_as_read(self):
+        """Marking message as read."""
         self.is_read = True
         self.save()

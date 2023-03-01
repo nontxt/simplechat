@@ -10,7 +10,7 @@ class ThreadAPIViewTestCase(BaseAPITestCase):
         """
         Test that a user can create a thread
         """
-        url = reverse('thread', kwargs={'username': self.stranger.username})
+        url = reverse('thread-detail', kwargs={'username': self.stranger.username})
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -20,7 +20,7 @@ class ThreadAPIViewTestCase(BaseAPITestCase):
         """
         Test that a user can't create a thread with not existed user
         """
-        url = reverse('thread', kwargs={'username': 'not_existed_user'})
+        url = reverse('thread-detail', kwargs={'username': 'not_existed_user'})
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -29,7 +29,7 @@ class ThreadAPIViewTestCase(BaseAPITestCase):
         """
         Test that a user can't create a thread with himself
         """
-        url = reverse('thread', kwargs={'username': self.user_1.username})
+        url = reverse('thread-detail', kwargs={'username': self.user_1.username})
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -39,7 +39,7 @@ class ThreadAPIViewTestCase(BaseAPITestCase):
         Test that a user can get an existed thread
         """
         Message.objects.create(sender=self.user_2, thread=self.thread, text=self.fake.text())
-        url = reverse('thread', kwargs={'username': self.user_2.username})
+        url = reverse('thread-detail', kwargs={'username': self.user_2.username})
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -51,7 +51,7 @@ class ThreadAPIViewTestCase(BaseAPITestCase):
         """
         Test that a user can delete an existed thread
         """
-        url = reverse('thread', kwargs={'username': self.user_2.username})
+        url = reverse('thread-detail', kwargs={'username': self.user_2.username})
         response = self.client.delete(url)
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
@@ -61,7 +61,7 @@ class ThreadAPIViewTestCase(BaseAPITestCase):
         """
         Test that a user can't delete a not existed thread
         """
-        url = reverse('thread', kwargs={'username': 'not_existed_user'})
+        url = reverse('thread-detail', kwargs={'username': 'not_existed_user'})
         response = self.client.delete(url)
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -166,7 +166,7 @@ class MessageAPIViewTestCase(BaseAPITestCase):
         self.assertEqual(self.thread.messages.count(), 1)
         self.assertFalse(self.message.is_read)
 
-        url = reverse('unread')
+        url = reverse('unread-list')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json()['count'], 0)
@@ -188,7 +188,7 @@ class MessageAPIViewTestCase(BaseAPITestCase):
 
         self.assertEqual(self.thread.messages.count(), 7)
 
-        url = reverse('unread')
+        url = reverse('unread-list')
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -207,7 +207,7 @@ class MessageAPIViewTestCase(BaseAPITestCase):
         message = Message.objects.create(sender=self.user_2, thread=self.thread, text=self.fake.text())
         self.assertFalse(message.is_read)
 
-        url = reverse('unread')
+        url = reverse('unread-mark-as-read')
         response = self.client.post(url, data={"message_id": 2})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -221,7 +221,7 @@ class MessageAPIViewTestCase(BaseAPITestCase):
         for _ in range(5):
             Message.objects.create(sender=self.user_2, thread=self.thread, text=self.fake.text())
 
-        url = reverse('unread')
+        url = reverse('unread-mark-as-read')
         response = self.client.post(url, data={"message_id": [2, 3, 4, 5, 6]}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -235,7 +235,7 @@ class MessageAPIViewTestCase(BaseAPITestCase):
         """
         Test that a user get HTTP_400_BAD_REQUEST if missed required parameter
         """
-        url = reverse('unread')
+        url = reverse('unread-mark-as-read')
         response = self.client.post(url)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -244,7 +244,7 @@ class MessageAPIViewTestCase(BaseAPITestCase):
         """
         Test that a user get NotFound if tried mark not existed message
         """
-        url = reverse('unread')
+        url = reverse('unread-mark-as-read')
         response = self.client.post(url, data={"message_id": 99})
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         response = self.client.post(url, data={"message_id": [99, 98, 97]}, format='json')
@@ -258,7 +258,7 @@ class MessageAPIViewTestCase(BaseAPITestCase):
         self.assertEqual(self.message.sender, self.user_1)
         self.assertEqual(self.message.id, 1)
 
-        url = reverse('unread')
+        url = reverse('unread-mark-as-read')
         response = self.client.post(url, data={"message_id": 1})
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

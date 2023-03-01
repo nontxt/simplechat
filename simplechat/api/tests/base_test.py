@@ -51,17 +51,17 @@ class BaseAPITestCase(APITestCase):
         # Define methods and urls
         requests = {
             client.get: [
-                reverse('unread'),
+                reverse('unread-list'),
                 reverse('messages', kwargs={'username': self.user_2.username}),
                 reverse('thread-list'),
-                reverse('thread', kwargs={'username': self.user_2.username})
+                reverse('thread-detail', kwargs={'username': self.user_2.username})
             ],
             client.post: [
-                reverse('unread'),
+                reverse('unread-mark-as-read'),
                 reverse('messages', kwargs={'username': self.user_2.username})
             ],
             client.delete: [
-                reverse('thread', kwargs={'username': self.user_2.username})
+                reverse('thread-detail', kwargs={'username': self.user_2.username})
             ]
         }
         for method, urls in requests.items():
@@ -80,22 +80,22 @@ class BaseAPITestCase(APITestCase):
         requests = {
             self.client.post: [
                 reverse('thread-list'),
-                reverse('thread', kwargs={'username': self.user_2.username})
+                reverse('thread-detail', kwargs={'username': self.user_2.username})
             ],
             self.client.put: [
-                reverse('unread'),
+                reverse('unread-mark-as-read'),
                 reverse('messages', kwargs={'username': self.user_2.username}),
                 reverse('thread-list'),
-                reverse('thread', kwargs={'username': self.user_2.username}),
+                reverse('thread-detail', kwargs={'username': self.user_2.username}),
             ],
             self.client.patch: [
-                reverse('unread'),
+                reverse('unread-mark-as-read'),
                 reverse('messages', kwargs={'username': self.user_2.username}),
                 reverse('thread-list'),
-                reverse('thread', kwargs={'username': self.user_2.username})
+                reverse('thread-detail', kwargs={'username': self.user_2.username})
             ],
             self.client.delete: [
-                reverse('unread'),
+                reverse('unread-list'),
                 reverse('messages', kwargs={'username': self.user_2.username}),
                 reverse('thread-list')
             ]
