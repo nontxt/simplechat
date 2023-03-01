@@ -1,0 +1,345 @@
+{
+	"info": {
+		"_postman_id": "45ef3e7f-1d94-46b9-95fb-35008473498d",
+		"name": "API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25347125"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Obtain DRF token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{localhost}}/token/",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"token",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtain JWT tokens",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{localhost}}/token/jwt/",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"token",
+								"jwt",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh JWT access token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "refresh",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY3Nzc4MDk1MiwiaWF0IjoxNjc3Njk0NTUyLCJqdGkiOiJmOGU2OGM3MzkxMmI0YjE0OTBiMWExODBkZDZjOWU3YSIsInVzZXJfaWQiOjF9.nPAddQRfle6DJVKncPaVGt5JPypg_ApAgMDRJeQpVqo",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{localhost}}/token/jwt/refresh/",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"token",
+								"jwt",
+								"refresh",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Thread",
+			"item": [
+				{
+					"name": "Create new thread or get if exists",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc3Njk1MTgwLCJpYXQiOjE2Nzc2OTQ4ODAsImp0aSI6IjMxZTkzOGJkZjJhOTQwMzNhODEwODg4MTNkNzljOWY5IiwidXNlcl9pZCI6MX0.KMMCfQNPyQPDQ884pNM56f9eyFHS81NqPoBEiwOk4qI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/api/threads/mario",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"threads",
+								"mario"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Return list of thread for current user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc3Njk1MTgwLCJpYXQiOjE2Nzc2OTQ4ODAsImp0aSI6IjMxZTkzOGJkZjJhOTQwMzNhODEwODg4MTNkNzljOWY5IiwidXNlcl9pZCI6MX0.KMMCfQNPyQPDQ884pNM56f9eyFHS81NqPoBEiwOk4qI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/api/threads",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"threads"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete thread",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc3Njk1MTgwLCJpYXQiOjE2Nzc2OTQ4ODAsImp0aSI6IjMxZTkzOGJkZjJhOTQwMzNhODEwODg4MTNkNzljOWY5IiwidXNlcl9pZCI6MX0.KMMCfQNPyQPDQ884pNM56f9eyFHS81NqPoBEiwOk4qI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/api/threads/mario",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"threads",
+								"mario"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Messages",
+			"item": [
+				{
+					"name": "Return list of messages for thread",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc3Njk1NTQ4LCJpYXQiOjE2Nzc2OTQ1NTIsImp0aSI6ImMzMzQyMmM4ZGM0ZTRmZTNiODhmZDM3ZmRhYTNhY2RhIiwidXNlcl9pZCI6MX0.689ZcYZRmN4W1LVHmY8mudBE0g4-yot4ue5-V1hXSEU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/api/messages/maria",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"messages",
+								"maria"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new message in thread",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc3Njk1NTQ4LCJpYXQiOjE2Nzc2OTQ1NTIsImp0aSI6ImMzMzQyMmM4ZGM0ZTRmZTNiODhmZDM3ZmRhYTNhY2RhIiwidXNlcl9pZCI6MX0.689ZcYZRmN4W1LVHmY8mudBE0g4-yot4ue5-V1hXSEU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "text",
+									"value": "Hello",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{localhost}}/api/messages/maria",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"messages",
+								"maria"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get unread messages",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc3Njk1NTQ4LCJpYXQiOjE2Nzc2OTQ1NTIsImp0aSI6ImMzMzQyMmM4ZGM0ZTRmZTNiODhmZDM3ZmRhYTNhY2RhIiwidXNlcl9pZCI6MX0.689ZcYZRmN4W1LVHmY8mudBE0g4-yot4ue5-V1hXSEU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/api/messages/unread",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"messages",
+								"unread"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mark as read",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc3Njk1NTQ4LCJpYXQiOjE2Nzc2OTQ1NTIsImp0aSI6ImMzMzQyMmM4ZGM0ZTRmZTNiODhmZDM3ZmRhYTNhY2RhIiwidXNlcl9pZCI6MX0.689ZcYZRmN4W1LVHmY8mudBE0g4-yot4ue5-V1hXSEU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "message_id",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{localhost}}/api/messages/unread/mark_as_read",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"messages",
+								"unread",
+								"mark_as_read"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
