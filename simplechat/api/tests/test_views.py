@@ -89,6 +89,21 @@ class ThreadAPIViewTestCase(BaseAPITestCase):
         self.assertEqual(results[1]['messages']['id'], 2)
         self.assertEqual(results[1]['interlocutor'], self.user_2.username)
 
+    def test_interlocutor_thread_url_in_message(self):
+        """
+        Test that a threads url consists of the interlocutor username
+        """
+        url = reverse('thread-list')
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        results = response.json()['results'][0]
+        self.assertEqual(results['interlocutor'], self.user_2.username)
+        self.assertEqual(results['messages']['id'], 1)
+        self.assertEqual(results['messages']['sender'], self.user_1.username)
+        self.assertTrue(results['messages']['thread_link'].endswith(self.user_2.username))
+
     def test_cant_list_strangers_threads(self):
         """
         Test that a user can't list strangers threads.
