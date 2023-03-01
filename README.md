@@ -39,4 +39,5 @@ This is a simple chat application on django, with DRF and simple-jwt authenticat
 | `api/messages/unread`              | GET    |                                              | Return unread messages for current user                                  |
 | `api/messages/unread/mark_as_read` | POST   | _message_id_ - must be single or list of ids | Mark provided messages as read                                           |
 
-**Note**: For using this API you must provide token for authenticate
+**Note**: For using this API you must provide token for authenticate. 
+* You can also import postman or insomnia collections of requests to test endpoints.
