@@ -23,6 +23,9 @@ class Message(models.Model):
     created = models.DateTimeField(auto_now_add=True, editable=False)
     is_read = models.BooleanField(default=False)
 
+    class Meta:
+        ordering = ['-created']
+
     def __str__(self):
         return f"Message from {self.sender}: {self.text}"
 
