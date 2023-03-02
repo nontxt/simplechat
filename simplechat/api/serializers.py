@@ -1,3 +1,4 @@
+from django.urls import reverse
 from rest_framework import serializers
 from .models import Thread, Message
 
@@ -29,17 +30,13 @@ class LastMessageSerializer(MessageSerializer):
     def get_thread_link(self, obj):
         """Return thread's url with interlocutor as urls kwarg."""
         owners = self.context.get('request').user
+        request = self.context.get('request')
 
         # Exclude owner from queryset and get interlocutor
-        queryset = obj.thread.participants.exclude(id=owners.id).first()
-        serializer = serializers.HyperlinkedRelatedField(view_name='thread-detail',
-                                                         lookup_field='username',
-                                                         lookup_url_kwarg='username',
-                                                         read_only=True)
-        url = serializer.get_url(queryset,
-                                 view_name='thread-detail',
-                                 request=self.context.get('request'),
-                                 format=self.context.get('format'))
+        interlocutor = obj.thread.participants.exclude(id=owners.id).first()
+
+        # Build url
+        url = request.build_absolute_uri(reverse('thread-detail', kwargs={'username': interlocutor.username}))
         return url
 
 
